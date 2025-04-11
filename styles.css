@@ -1,14 +1,14 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  background: radial-gradient(circle at top, #1c1c1c, #111);
   color: #fff;
   text-align: center;
 }
 
 header {
   padding: 2em 0;
-  background: #111;
+  background: #222;
   border-bottom: 2px solid #444;
 }
 
@@ -16,38 +16,60 @@ main {
   padding: 3em 1em;
 }
 
-.bet-section {
+.balance {
+  font-size: 1.2em;
   margin-bottom: 2em;
+  color: #ffcc00;
 }
 
-input[type="number"] {
+.bet-section input {
   padding: 0.5em;
-  width: 150px;
-  margin: 0.5em;
+  width: 160px;
   border-radius: 5px;
   border: none;
+  margin: 0.5em;
+}
+
+.buttons {
+  margin-top: 1em;
 }
 
 button {
-  padding: 0.5em 1em;
+  padding: 0.6em 1.2em;
   background: #ffcc00;
   border: none;
   border-radius: 5px;
   font-weight: bold;
+  margin: 0.3em;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 button:hover {
   background: #e6b800;
+  transform: scale(1.05);
 }
 
 .result {
-  font-size: 1.5em;
-  margin-top: 1em;
+  font-size: 1.3em;
+  margin-top: 2em;
+}
+
+.win {
+  color: #00ff88;
+}
+
+.lose {
+  color: #ff4444;
+}
+
+.draw {
+  color: #cccccc;
 }
 
 footer {
   padding: 1em 0;
-  background: #111;
+  background: #222;
   border-top: 2px solid #444;
+  margin-top: 3em;
 }
