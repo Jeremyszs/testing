@@ -16,7 +16,7 @@
     <div class="balance">
       💰 Your Balance: <span id="balance">100</span> coins
     </div>
-
+  
     <section class="bet-section">
       <label for="bet-amount">Enter your bet:</label>
       <input type="number" id="bet-amount" min="1" placeholder="e.g. 10" />
@@ -26,9 +26,11 @@
         <button onclick="diceRoll()">Dice Roll</button>
       </div>
     </section>
-
+  
+    <section class="animation" id="animation"></section>
     <section class="result" id="result"></section>
   </main>
+
 
   <footer>
     <p>© 2025 LuckySpin. Gamble responsibly.</p>
@@ -36,11 +38,11 @@
 
   <script>
     let balance = 100;
-
+  
     function updateBalanceDisplay() {
       document.getElementById('balance').innerText = balance;
     }
-
+  
     function getBet() {
       const bet = parseInt(document.getElementById('bet-amount').value);
       if (isNaN(bet) || bet <= 0 || bet > balance) {
@@ -49,47 +51,64 @@
       }
       return bet;
     }
-
+  
+    function showAnimation(type) {
+      const anim = document.getElementById('animation');
+      anim.innerHTML = '';
+  
+      if (type === 'coin') {
+        anim.innerHTML = '<div class="coin"></div>';
+      } else if (type === 'dice') {
+        anim.innerHTML = '<div class="dice">🎲</div>';
+      }
+    }
+  
     function coinFlip() {
       const bet = getBet();
       if (!bet) return;
-      const resultText = document.getElementById('result');
-
-      const outcome = Math.random() < 0.5 ? 'lose' : 'win';
-      balance += (outcome === 'win') ? bet : -bet;
-
-      resultText.innerHTML = `
-        <div class="${outcome}">
-          Coin Flip: You ${outcome === 'win' ? 'won' : 'lost'} ${bet} coins!
-        </div>
-      `;
-      updateBalanceDisplay();
+  
+      showAnimation('coin');
+      setTimeout(() => {
+        const resultText = document.getElementById('result');
+        const outcome = Math.random() < 0.5 ? 'lose' : 'win';
+        balance += (outcome === 'win') ? bet : -bet;
+  
+        resultText.innerHTML = `
+          <div class="${outcome}">
+            Coin Flip: You ${outcome === 'win' ? 'won' : 'lost'} ${bet} coins!
+          </div>
+        `;
+        updateBalanceDisplay();
+      }, 1000);
     }
-
+  
     function diceRoll() {
       const bet = getBet();
       if (!bet) return;
-      const resultText = document.getElementById('result');
-
-      const userRoll = Math.ceil(Math.random() * 6);
-      const botRoll = Math.ceil(Math.random() * 6);
-
-      let resultMsg = `You rolled 🎲 ${userRoll} - Bot rolled 🎲 ${botRoll}<br>`;
-      if (userRoll > botRoll) {
-        balance += bet;
-        resultMsg += `<span class="win">You won ${bet} coins!</span>`;
-      } else if (userRoll < botRoll) {
-        balance -= bet;
-        resultMsg += `<span class="lose">You lost ${bet} coins!</span>`;
-      } else {
-        resultMsg += `<span class="draw">It’s a draw! No coins lost.</span>`;
-      }
-
-      resultText.innerHTML = resultMsg;
-      updateBalanceDisplay();
+  
+      showAnimation('dice');
+      setTimeout(() => {
+        const userRoll = Math.ceil(Math.random() * 6);
+        const botRoll = Math.ceil(Math.random() * 6);
+  
+        let resultMsg = `You rolled 🎲 ${userRoll} - Bot rolled 🎲 ${botRoll}<br>`;
+        if (userRoll > botRoll) {
+          balance += bet;
+          resultMsg += `<span class="win">You won ${bet} coins!</span>`;
+        } else if (userRoll < botRoll) {
+          balance -= bet;
+          resultMsg += `<span class="lose">You lost ${bet} coins!</span>`;
+        } else {
+          resultMsg += `<span class="draw">It’s a draw! No coins lost.</span>`;
+        }
+  
+        document.getElementById('result').innerHTML = resultMsg;
+        updateBalanceDisplay();
+      }, 1000);
     }
-
+  
     updateBalanceDisplay();
   </script>
+
 </body>
 </html>
