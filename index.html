@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LuckySpin - Gamble & Win</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>🎲 LuckySpin</h1>
+    <p>Place your bet and test your luck!</p>
+  </header>
+
+  <main>
+    <section class="bet-section">
+      <label for="bet-amount">Enter your bet:</label>
+      <input type="number" id="bet-amount" placeholder="e.g. 100 coins" />
+      <button onclick="rollDice()">Spin the Wheel</button>
+    </section>
+
+    <section class="result" id="result"></section>
+  </main>
+
+  <footer>
+    <p>© 2025 LuckySpin. Gamble responsibly.</p>
+  </footer>
+
+  <script>
+    function rollDice() {
+      const result = Math.random() < 0.5 ? 'You lost 😢' : 'You won 🎉';
+      document.getElementById('result').innerText = result;
+    }
+  </script>
+</body>
+</html>
