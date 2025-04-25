@@ -3,112 +3,182 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LuckySpin - Gamble & Win</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>CPS Test</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1a1a1a;
+      color: #f1f1f1;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 32px;
+    }
+    .dropdown-container {
+      margin-bottom: 25px;
+    }
+    select {
+      font-size: 18px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      background-color: #2c2c2c;
+      color: #f1f1f1;
+      border: 1px solid #444;
+      outline: none;
+      transition: border 0.3s ease;
+    }
+    select:hover, select:focus {
+      border-color: #1e88e5;
+    }
+    #instructions {
+      margin-bottom: 20px;
+      font-size: 18px;
+      color: #ccc;
+    }
+    #click-area {
+      padding: 50px;
+      background: #1e88e5;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      margin: 20px auto;
+      width: 300px;
+      border-radius: 12px;
+      user-select: none;
+      transition: background 0.3s ease, transform 0.1s ease;
+    }
+    #click-area:active {
+      transform: scale(0.95);
+    }
+    #timer, #result {
+      font-size: 20px;
+      margin-top: 20px;
+    }
+    #popup {
+      display: none;
+      position: fixed;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #2e2e2e;
+      color: #fff;
+      padding: 25px 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.7);
+      z-index: 1000;
+    }
+    #popup button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #1e88e5;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #popup button:hover {
+      background-color: #1565c0;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>🎰 LuckySpin</h1>
-    <p>Start with 100 coins. Bet and win big!</p>
-  </header>
+  <h1>Click Per Second Test</h1>
+  <div class="dropdown-container">
+    <label for="time-select">Choose test duration:</label><br>
+    <select id="time-select">
+      <option value="1">1 second</option>
+      <option value="5">5 seconds</option>
+      <option value="10">10 seconds</option>
+      <option value="15">15 seconds</option>
+      <option value="30">30 seconds</option>
+      <option value="60">60 seconds</option>
+    </select>
+  </div>
 
-  <main>
-    <div class="balance">
-      💰 Your Balance: <span id="balance">100</span> coins
-    </div>
-  
-    <section class="bet-section">
-      <label for="bet-amount">Enter your bet:</label>
-      <input type="number" id="bet-amount" min="1" placeholder="e.g. 10" />
-      
-      <div class="buttons">
-        <button onclick="coinFlip()">Coin Flip</button>
-        <button onclick="diceRoll()">Dice Roll</button>
-      </div>
-    </section>
-  
-    <section class="animation" id="animation"></section>
-    <section class="result" id="result"></section>
-  </main>
+  <div id="instructions">Click the box below to start your CPS test!</div>
+  <div id="click-area">Click me to start!</div>
+  <div id="timer"></div>
+  <div id="result"></div>
 
-
-  <footer>
-    <p>© 2025 LuckySpin. Gamble responsibly.</p>
-  </footer>
+  <div id="popup">
+    <div id="popup-message"></div>
+    <button onclick="closePopup()">Close</button>
+  </div>
 
   <script>
-    let balance = 100;
-  
-    function updateBalanceDisplay() {
-      document.getElementById('balance').innerText = balance;
-    }
-  
-    function getBet() {
-      const bet = parseInt(document.getElementById('bet-amount').value);
-      if (isNaN(bet) || bet <= 0 || bet > balance) {
-        alert('Enter a valid bet within your balance!');
-        return null;
-      }
-      return bet;
-    }
-  
-    function showAnimation(type) {
-      const anim = document.getElementById('animation');
-      anim.innerHTML = '';
-  
-      if (type === 'coin') {
-        anim.innerHTML = '<div class="coin"></div>';
-      } else if (type === 'dice') {
-        anim.innerHTML = '<div class="dice">🎲</div>';
-      }
-    }
-  
-    function coinFlip() {
-      const bet = getBet();
-      if (!bet) return;
-  
-      showAnimation('coin');
-      setTimeout(() => {
-        const resultText = document.getElementById('result');
-        const outcome = Math.random() < 0.5 ? 'lose' : 'win';
-        balance += (outcome === 'win') ? bet : -bet;
-  
-        resultText.innerHTML = `
-          <div class="${outcome}">
-            Coin Flip: You ${outcome === 'win' ? 'won' : 'lost'} ${bet} coins!
-          </div>
-        `;
-        updateBalanceDisplay();
-      }, 1000);
-    }
-  
-    function diceRoll() {
-      const bet = getBet();
-      if (!bet) return;
-  
-      showAnimation('dice');
-      setTimeout(() => {
-        const userRoll = Math.ceil(Math.random() * 6);
-        const botRoll = Math.ceil(Math.random() * 6);
-  
-        let resultMsg = `You rolled 🎲 ${userRoll} - Bot rolled 🎲 ${botRoll}<br>`;
-        if (userRoll > botRoll) {
-          balance += bet;
-          resultMsg += `<span class="win">You won ${bet} coins!</span>`;
-        } else if (userRoll < botRoll) {
-          balance -= bet;
-          resultMsg += `<span class="lose">You lost ${bet} coins!</span>`;
-        } else {
-          resultMsg += `<span class="draw">It’s a draw! No coins lost.</span>`;
-        }
-  
-        document.getElementById('result').innerHTML = resultMsg;
-        updateBalanceDisplay();
-      }, 1000);
-    }
-  
-    updateBalanceDisplay();
-  </script>
+    let clicks = 0;
+    let timeLeft = 0;
+    let testRunning = false;
+    let timerInterval;
 
+    const clickArea = document.getElementById('click-area');
+    const result = document.getElementById('result');
+    const timeSelect = document.getElementById('time-select');
+    const timerDisplay = document.getElementById('timer');
+    const instructions = document.getElementById('instructions');
+    const popup = document.getElementById('popup');
+    const popupMessage = document.getElementById('popup-message');
+
+    function resetTest() {
+      testRunning = false;
+      clearInterval(timerInterval);
+      timerDisplay.textContent = '';
+      clickArea.textContent = 'Click me to start!';
+      instructions.style.display = 'block';
+    }
+
+    function getCpsCategory(cps) {
+      if (cps <= 5) return "🐢 Slow";
+      if (cps <= 8) return "🐇 Average";
+      if (cps <= 12) return "⚡ Fast";
+      return "🔥 Insane";
+    }
+
+    function showPopup(message) {
+      popupMessage.innerHTML = message;
+      popup.style.display = 'block';
+    }
+
+    function closePopup() {
+      popup.style.display = 'none';
+    }
+
+    clickArea.addEventListener('click', () => {
+      if (!testRunning) {
+        clicks = 0;
+        timeLeft = parseInt(timeSelect.value);
+        testRunning = true;
+        result.textContent = "";
+        instructions.style.display = 'none';
+        clickArea.textContent = "Click!";
+        timerDisplay.textContent = `Time left: ${timeLeft}s`;
+
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          if (timeLeft > 0) {
+            timerDisplay.textContent = `Time left: ${timeLeft}s`;
+          } else {
+            clearInterval(timerInterval);
+            testRunning = false;
+            const totalTime = parseInt(timeSelect.value);
+            const cps = (clicks / totalTime).toFixed(2);
+            const rating = getCpsCategory(cps);
+            result.innerHTML = `Total Clicks: ${clicks}<br>CPS: ${cps}<br>Rating: ${rating}`;
+            showPopup(`⏱ Time's up!<br><br>You clicked <strong>${clicks}</strong> times in ${totalTime} seconds.<br>Your CPS is <strong>${cps}</strong><br>Performance: <strong>${rating}</strong>`);
+            resetTest();
+          }
+        }, 1000);
+      } else {
+        clicks++;
+        clickArea.style.transform = "scale(0.95)";
+        setTimeout(() => {
+          clickArea.style.transform = "scale(1)";
+        }, 80);
+      }
+    });
+  </script>
 </body>
 </html>
